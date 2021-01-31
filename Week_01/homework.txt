@@ -1,0 +1,286 @@
+
+合并两个有序链表
+https://leetcode-cn.com/problems/merge-two-sorted-lists/
+
+/**
+ * 
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        
+        if (l1.val < l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        }
+    }
+}
+
+=============================================
+
+移动零
+https://leetcode-cn.com/problems/move-zeroes/
+
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int pos = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[pos] = nums[i];
+                pos++;
+            }
+        }
+        for (int i = pos; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+}
+
+=============================================
+
+加一
+https://leetcode-cn.com/problems/plus-one/
+
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int i = digits.length - 1;
+        digits[i] = digits[i] + 1;
+        while(i >= 0) {
+            if (i == 0 && digits[i] > 9) {
+                int[] newDigits = new int[digits.length + 1];
+                newDigits[0] = 1;
+                newDigits[1] = digits[0] - 10;
+                for(int k = 2; k < newDigits.length; k++) {
+                    newDigits[k] = digits[k - 1];
+                }
+                digits = newDigits;
+            }
+            if (digits[i] > 9) {
+                digits[i] = digits[i] - 10;
+                digits[i - 1] = digits[i - 1] + 1;
+            }
+            i--;
+        }
+        
+        return digits;
+
+    }
+}
+
+=============================================
+
+两数之和
+https://leetcode-cn.com/problems/two-sum/
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{i, map.get(target - nums[i])};
+            }
+            map.put(nums[i], i);
+        }
+
+        return null;
+
+    }
+}
+
+=============================================
+
+设计循环双端队列
+https://leetcode-cn.com/problems/design-circular-deque/
+
+class MyCircularDeque {
+
+        private final int capacity;
+
+        private Node head;
+
+        private Node tail;
+
+        private int size;
+
+
+        /** Initialize your data structure here. Set the size of the deque to be k. */
+        public MyCircularDeque(int k) {
+            if (k <  0) {
+                throw new IllegalArgumentException("size should be greater than zero");
+            }
+            capacity = k;
+        }
+
+        /** Adds an item at the front of Deque. Return true if the operation is successful. */
+        public boolean insertFront(int value) {
+            if (size >= capacity) {
+                return false;
+            }
+            if (head == null) {
+                head = new Node(value);
+                if (tail == null) {
+                    tail = head;
+                }
+                size++;
+                return true;
+            }
+            Node temp = new Node(value);
+            head.prev = temp;
+            temp.next = head;
+            
+            head = temp;
+            size++;
+            return true;
+        }
+
+
+
+        /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+        public boolean insertLast(int value) {
+            if (size >= capacity) {
+                return false;
+            }
+            if (tail == null) {
+                tail = new Node(value);
+                if (head == null) {
+                    head = tail;
+                }
+                size++;
+                return true;
+            }
+            Node temp = new Node(value);
+            tail.next = temp;
+            temp.prev = tail;
+            
+            tail = temp;
+            size++;
+            return true;
+        }
+
+
+
+        /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+        public boolean deleteFront() {
+            if (size <= 0) {
+                return false;
+            }
+            Node tempHead = head;
+            head = head.next;
+            tempHead.next = null;
+            if (head != null) {
+                head.prev = null;
+            } else {
+                tail = null;
+            }
+            size--;
+            return true;
+        }
+
+        /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+        public boolean deleteLast() {
+            if (size <= 0) {
+                return false;
+            }
+            Node tempTail = tail;
+            tail = tail.prev;
+            tempTail.prev = null;
+            if (tail != null) {
+                tail.next = null;
+            } else {
+                head = null;
+            }
+            size--;
+            return true;
+        }
+
+        /** Get the front item from the deque. */
+        public int getFront() {
+            if (head == null) {
+                return -1;
+            }
+            return head.value;
+        }
+
+        /** Get the last item from the deque. */
+        public int getRear() {
+            if (tail == null) {
+                return -1;
+            }
+            return tail.value;
+        }
+
+        /** Checks whether the circular deque is empty or not. */
+        public boolean isEmpty() {
+            return size == 0;
+        }
+
+        /** Checks whether the circular deque is full or not. */
+        public boolean isFull() {
+            return size >= capacity;
+        }
+
+
+        private class Node {
+
+            Node prev;
+
+            Node next;
+
+            int value;
+
+            public Node (int value) {
+                this.value = value;
+            }
+
+        }
+    }
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque obj = new MyCircularDeque(k);
+ * boolean param_1 = obj.insertFront(value);
+ * boolean param_2 = obj.insertLast(value);
+ * boolean param_3 = obj.deleteFront();
+ * boolean param_4 = obj.deleteLast();
+ * int param_5 = obj.getFront();
+ * int param_6 = obj.getRear();
+ * boolean param_7 = obj.isEmpty();
+ * boolean param_8 = obj.isFull();
+ */
+
+=============================================
+
+删除排序数组中的重复项
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/submissions/
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int i = 0;
+        for (int j = 1; j < nums.length; j++) {
+            if (nums[i] != nums[j]) {
+                if (j - i > 1) {
+                    nums[i + 1] = nums[j];
+                }  
+                i++;
+            }
+        
+        }
+        return i + 1;
+    }
+}
