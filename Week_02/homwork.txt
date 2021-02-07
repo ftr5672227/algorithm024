@@ -1,0 +1,78 @@
+94. 二叉树的中序遍历
+
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        List<Integer> ret = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        while (stack.size() > 0 || root != null) {
+            if (root != null) {
+                stack.add(root);
+                root = root.left;
+            } else {
+                TreeNode pop = stack.pop();
+                ret.add(pop.val);
+                root = pop.right;
+            }
+        }
+        return ret;
+    }
+}
+
+=======================================
+
+1. 两数之和
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{i, map.get(target - nums[i])};
+            }
+            map.put(nums[i], i);
+        }
+
+        return null;
+
+    }
+}
+
+=======================================
+
+347. 前 K 个高频元素
+
+class Solution {
+        public int[] topKFrequent(int[] nums, int k) {
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int i = 0; i < nums.length; i++) {
+                map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+            }
+            ArrayList<Integer>[] list = new ArrayList[nums.length + 1];
+            for (Integer num : map.keySet()) {
+                int count = map.get(num);
+                if (list[count] == null) {
+                    list[count] = new ArrayList<>();
+                }
+                list[count].add(num);
+            }
+
+            List<Integer> ret = new ArrayList<>();
+            for (int i = nums.length; i > 0; i--) {
+                if (list[i] != null) {
+                    ret.addAll(list[i]);
+                }
+                if (ret.size() >= k) {
+                    break;
+                }
+            }
+            int[] res = new int[ret.size()];
+            for (int i = 0; i < ret.size(); i ++) {
+                res[i] = ret.get(i);
+            }
+            return res;
+
+        }
+    }
