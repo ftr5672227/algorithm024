@@ -1,0 +1,75 @@
+104. 二叉树的最大深度
+
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = root.left != null ? maxDepth(root.left) : 0;
+        int right = root.right != null ? maxDepth(root.right) : 0;
+
+        return Math.max(left, right) + 1;
+    }
+    
+    
+}
+
+
+22. 括号生成
+
+class Solution {
+        public List<String> generateParenthesis(int n) {
+            if (n <= 0) {
+                return Collections.emptyList();
+            }
+            List<String> ret = new ArrayList<>();
+            generate(0, 0, "", ret, n);
+
+            return ret;
+        }
+
+        private void generate(int left, int right, String str, List<String> list, int n) {
+            if (str.length() == n * 2) {
+                list.add(str);
+                return;
+            }
+            if (left < n) {
+                generate(left + 1, right, str + "(", list, n);
+            }
+            if (right < left) {
+                generate(left, right + 1,  str + ")", list, n);
+            }
+        }
+    }
+
+
+236. 二叉树的最近公共祖先
+
+class Solution {
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            return root;
+        } else if (left != null) {
+            return left;
+        } else if (right != null) {
+            return right;
+        }
+        
+        return null;
+
+    }
+}
+
+
+
